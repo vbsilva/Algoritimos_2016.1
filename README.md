@@ -4,7 +4,11 @@
 
 ### Link das questões:
 	
-	[L1][1]: A Transportadora. [1]: https://www.thehuxley.com/problem/708/
+	[Lista 1](https://www.thehuxley.com/problem/708): A Transportadora.  
+		> Lista, fila e pilhas.  
+
+	
+	
 
 
 <vbas@cin.ufpe.br>
