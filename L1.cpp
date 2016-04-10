@@ -31,6 +31,8 @@ public:
 	Caminhao();
 	~Caminhao();
 	void loa(Galpao g);
+	void setCapacity(int c);
+	int getCapacity();
 	
 };
 
@@ -55,23 +57,57 @@ void Galpao::add(int w){
 Caminhao::Caminhao(){
 	capacity = 0;
 	sum = 0;
-};
+}
+
 Caminhao::~Caminhao(){};
+
 void Caminhao::loa(Galpao g){
 	cout << "ae" << endl;
 }
+
+void Caminhao::setCapacity(int c){
+	capacity = c;
+}
+
+int Caminhao::getCapacity(){ return capacity; }
 // ------------------------ main .cpp ------------------------------
 
 int main(){
 
 	Galpao g;
-	g.add(10);
-	g.add(2);
-	int i;
-	cin >> i;
-	Caminhao *c = new Caminhao[i];
-	for(int j = 0; j < i; j++){
-		c[j].loa(g);
+	bool newCase = 0;
+	int n, cap, op;
+	char str[4];
+	while(!newCase){
+		cin >> n;
+		Caminhao *c = new Caminhao[n];
+		for(int j = 0; j < n; j++){
+			cin >> cap;
+			c[j].setCapacity(cap);
+		}
+
+		while(!newCase){
+			cout<< "manda\n";
+			cin >> str >> op;
+			cout << str << " e " << op << endl;
+			cout<< str[0] << endl;
+			if(str == "ADD"){
+				g.add(op);
+				cout << "vixxxx";
+			}else if(str == "LOA"){
+
+			}else if(str == "DEL"){
+
+			}else if(str == "INF"){
+
+			}else if(str[0] == '\n'){
+				cout << "qqqqq";
+
+			}
+
+		}
 	}
+	
+
 	return 0;
 }
