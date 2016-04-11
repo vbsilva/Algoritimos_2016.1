@@ -1,6 +1,6 @@
-#include <iostream>
+//#include <iostream>
 #include <bits/stdc++.h>
-#include <vector>
+//#include <vector>
 using namespace std;
 
 
@@ -10,13 +10,16 @@ class Galpao
 {
 private:
 	int sum;
-	vector<int> vec;
+	queue<int> q;
 
 public:
 	Galpao();
 	~Galpao();
-	int getNumItens();
 	void add(int w);
+	queue<int> getQueue();
+	void printQueue();
+	int getSum();
+	int decSum(int w);
 
 };
 
@@ -26,13 +29,14 @@ class Caminhao
 {
 private:
 	int capacity, sum;
-	vector<int> vec;
+	stack<int> s;
 public:
 	Caminhao();
 	~Caminhao();
 	void loa(Galpao g);
 	void setCapacity(int c);
 	int getCapacity();
+	void printStack();
 	
 };
 
@@ -44,13 +48,30 @@ Galpao::Galpao(){
 
 Galpao::~Galpao(){}
 
-int Galpao::getNumItens(){
-	return vec.size();
+
+void Galpao::printQueue(){
+	queue<int> temp = this->q;
+	cout<< "galpao: ";
+	while(!temp.empty()){
+		cout << temp.front() << " ";
+		temp.pop();
+	}
+	cout << endl;
 }
+
 void Galpao::add(int w){
 	sum += w;
-	vec.push_back(w);
-	cout << vec.size() << " " << sum << endl;
+	q.push(w);
+	cout << q.size() << " " << sum << endl;
+}
+
+queue<int> Galpao::getQueue(){ return q; }
+
+int Galpao::getSum(){ return sum; }
+
+int Galpao::decSum(int w){
+	this->sum -= w;
+	cout << "total galpao: " << this->sum << endl;
 }
 
 //caminhao
@@ -61,8 +82,28 @@ Caminhao::Caminhao(){
 
 Caminhao::~Caminhao(){};
 
+void Caminhao::printStack(){
+	stack<int> temp = this->s;
+	cout<< "caminhao: ";
+	while(!temp.empty()){
+		cout << temp.top() << " ";
+		temp.pop();
+	}
+	cout << endl;
+}
+
 void Caminhao::loa(Galpao g){
-	cout << "ae" << endl;
+	queue<int> q = g.getQueue();
+	int temp = g.getQueue().front();
+	while(!q.empty() && this->sum + temp <= this->capacity){
+		this->s.push(temp);
+		this->sum += temp;
+		q.pop();
+		g.decSum(temp);
+		temp = q.front();
+	}
+	g.printQueue();
+
 }
 
 void Caminhao::setCapacity(int c){
@@ -86,16 +127,15 @@ int main(){
 			c[j].setCapacity(cap);
 		}
 
-		while(!newCase){
-			cout<< "manda\n";
+		while(true){
+			newCase = true;
 			cin >> str >> op;
-			cout << str << " e " << op << endl;
-			cout<< str[0] << endl;
-			if(str == "ADD"){
+			if(!strcmp(str, "ADD")){
 				g.add(op);
-				cout << "vixxxx";
-			}else if(str == "LOA"){
-
+			}else if(!strcmp(str, "LOA")){
+				c[op].loa(g);
+				c[op].printStack();
+				cout << "debug " << g.getSum() << endl;
 			}else if(str == "DEL"){
 
 			}else if(str == "INF"){
