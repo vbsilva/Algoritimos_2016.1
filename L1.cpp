@@ -48,7 +48,8 @@ public:
 // ------------------ implementacao .cpp --------------------------
 //galpao
 Galpao::Galpao(){
-	sum = 0;
+	this->sum = 0;
+	while(!this->q.empty()) this->q.pop();
 }
 
 Galpao::~Galpao(){}
@@ -87,8 +88,9 @@ int Galpao::decSum(int w){
 
 //caminhao
 Caminhao::Caminhao(){
-	capacity = 0;
-	sum = 0;
+	this->capacity = 0;
+	this->sum = 0;
+	while(!this->s.empty()) this->s.pop();
 }
 
 Caminhao::~Caminhao(){};
@@ -110,18 +112,21 @@ void Caminhao::loa(Galpao &g){
 		g.removeNext();
 		g.decSum(temp);
 		this->sum += temp;
-		temp = g.nextQ();
+		if(!g.isEmpty()) temp = g.nextQ();
 	}
 	//g.printQueue();
 }
 
 void Caminhao::del(){
-	if(s.size() > 0) s.pop();
+	if(this->s.size() > 0){
+		this->sum -= this->s.top();
+		this->s.pop();
+	}
 	cout << s.size() << endl;
 }
 
 void Caminhao::inf(){
-	cout << s.size() << " " << sum << endl;
+	cout << this->s.size() << " " << this->sum << endl;
 }
 
 void Caminhao::setCapacity(int c){
@@ -139,7 +144,7 @@ int main(){
 	int n, cap, op;
 	char str[4];
 	while(!end){
-		if(firstTime) cin >> n;
+		if(firstTime){cin >> n;}
 		Galpao g;
 		Caminhao *c = new Caminhao[n];
 		for(int j = 0; j < n; j++){
@@ -152,23 +157,34 @@ int main(){
 				end = true;
 				break;
 			}
-			cin >> op;
+			scanf("%d", &op);
+			//cout << str << " " << op << endl;
 			if(!strcmp(str, "ADD")){
 				g.add(op);
 			}else if(!strcmp(str, "LOA")){
-				c[op].loa(g);
-				//c[op].printStack();
-				cout << op << " " << c[op].getSize() << endl;
+				if(op>=n){
+				}else{
+					c[op].loa(g);
+					cout << op << " " << c[op].getSize() << endl;
+				}
 			}else if(!strcmp(str, "DEL")){
-				cout << op << " ";
-				c[op].del();
-			}else if(strcmp(str, "INF")){
-				cout << op << " ";
-				c[op].inf();
-			}else if(str[0] == '\n'){
+				if(op>=n){
+				}else{
+					cout << op << " ";
+					c[op].del();				
+				}
+			}else if(!strcmp(str, "INF")){
+				if(op>=n){
+					cout <<"debug: "<< op << " " << n << endl;
+				}else{
+					cout << op << " ";
+					c[op].inf();
+				}
+			}else{
 				n = atoi(str);
-				delete[] c; 
-				g.~Galpao();
+				cout << endl;
+				//delete[] c; 
+				//g.~Galpao();
 				break;
 			}
 
