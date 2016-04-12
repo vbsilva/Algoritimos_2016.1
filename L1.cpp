@@ -1,6 +1,4 @@
-//#include <iostream>
 #include <bits/stdc++.h>
-//#include <vector>
 using namespace std;
 
 
@@ -20,6 +18,10 @@ public:
 	void printQueue();
 	int getSum();
 	int decSum(int w);
+	int getSize();
+	bool isEmpty();
+	int nextQ();
+	void removeNext();
 
 };
 
@@ -33,10 +35,13 @@ private:
 public:
 	Caminhao();
 	~Caminhao();
-	void loa(Galpao g);
+	void loa(Galpao &g);
 	void setCapacity(int c);
 	int getCapacity();
 	void printStack();
+	int getSize();
+	void del();
+	void inf();
 	
 };
 
@@ -59,11 +64,18 @@ void Galpao::printQueue(){
 	cout << endl;
 }
 
+int Galpao::getSize(){ return q.size(); }
+
+bool Galpao::isEmpty(){ return q.empty(); }
+
 void Galpao::add(int w){
 	sum += w;
 	q.push(w);
 	cout << q.size() << " " << sum << endl;
 }
+
+int Galpao::nextQ(){ return q.front(); }
+void Galpao::removeNext(){ q.pop(); }
 
 queue<int> Galpao::getQueue(){ return q; }
 
@@ -71,7 +83,6 @@ int Galpao::getSum(){ return sum; }
 
 int Galpao::decSum(int w){
 	this->sum -= w;
-	cout << "total galpao: " << this->sum << endl;
 }
 
 //caminhao
@@ -92,18 +103,25 @@ void Caminhao::printStack(){
 	cout << endl;
 }
 
-void Caminhao::loa(Galpao g){
-	queue<int> q = g.getQueue();
-	int temp = g.getQueue().front();
-	while(!q.empty() && this->sum + temp <= this->capacity){
+void Caminhao::loa(Galpao &g){
+	int temp = g.nextQ();
+	while(!g.isEmpty() && this->sum + temp <= this->capacity){
 		this->s.push(temp);
-		this->sum += temp;
-		q.pop();
+		g.removeNext();
 		g.decSum(temp);
-		temp = q.front();
+		this->sum += temp;
+		temp = g.nextQ();
 	}
-	g.printQueue();
+	//g.printQueue();
+}
 
+void Caminhao::del(){
+	if(s.size() > 0) s.pop();
+	cout << s.size() << endl;
+}
+
+void Caminhao::inf(){
+	cout << s.size() << " " << sum << endl;
 }
 
 void Caminhao::setCapacity(int c){
@@ -111,38 +129,47 @@ void Caminhao::setCapacity(int c){
 }
 
 int Caminhao::getCapacity(){ return capacity; }
+
+int Caminhao::getSize(){ return s.size(); }
 // ------------------------ main .cpp ------------------------------
 
 int main(){
 
-	Galpao g;
-	bool newCase = 0;
+	bool newCase = false, firstTime = true, end = false;
 	int n, cap, op;
 	char str[4];
-	while(!newCase){
-		cin >> n;
+	while(!end){
+		if(firstTime) cin >> n;
+		Galpao g;
 		Caminhao *c = new Caminhao[n];
 		for(int j = 0; j < n; j++){
 			cin >> cap;
 			c[j].setCapacity(cap);
 		}
-
+		firstTime = false;
 		while(true){
-			newCase = true;
-			cin >> str >> op;
+			if(scanf("%s", str) == EOF){
+				end = true;
+				break;
+			}
+			cin >> op;
 			if(!strcmp(str, "ADD")){
 				g.add(op);
 			}else if(!strcmp(str, "LOA")){
 				c[op].loa(g);
-				c[op].printStack();
-				cout << "debug " << g.getSum() << endl;
-			}else if(str == "DEL"){
-
-			}else if(str == "INF"){
-
+				//c[op].printStack();
+				cout << op << " " << c[op].getSize() << endl;
+			}else if(!strcmp(str, "DEL")){
+				cout << op << " ";
+				c[op].del();
+			}else if(strcmp(str, "INF")){
+				cout << op << " ";
+				c[op].inf();
 			}else if(str[0] == '\n'){
-				cout << "qqqqq";
-
+				n = atoi(str);
+				delete[] c; 
+				g.~Galpao();
+				break;
 			}
 
 		}
