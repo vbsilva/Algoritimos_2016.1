@@ -4,8 +4,8 @@
 
 ### Link das questões:
 	
-	[Lista 1](https://www.thehuxley.com/problem/708): A Transportadora.  
-		> Lista, fila e pilhas.  
+	* [Lista 1] (https://www.thehuxley.com/problem/708): A Transportadora.  
+		* Lista, fila e pilhas.  
 
 	
 	
