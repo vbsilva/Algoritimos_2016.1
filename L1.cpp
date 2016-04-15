@@ -13,15 +13,18 @@ private:
 public:
 	Galpao();
 	~Galpao();
-	void add(int w);
 	queue<int> getQueue();
 	void printQueue();
 	int getSum();
+	void pushQueue(int w);
+	void adcSum(int w);
 	int decSum(int w);
 	int getSize();
 	bool isEmpty();
 	int nextQ();
 	void removeNext();
+	void zeraSatanai();
+	void add(int w);
 
 };
 
@@ -42,6 +45,8 @@ public:
 	int getSize();
 	void del();
 	void inf();
+	void zeraMisera();
+	int getSum();
 	
 };
 
@@ -65,25 +70,40 @@ void Galpao::printQueue(){
 	cout << endl;
 }
 
-int Galpao::getSize(){ return q.size(); }
+int Galpao::getSize(){ return this->q.size(); }
 
-bool Galpao::isEmpty(){ return q.empty(); }
+bool Galpao::isEmpty(){ return this->q.empty(); }
 
-void Galpao::add(int w){
-	sum += w;
-	q.push(w);
-	cout << q.size() << " " << sum << endl;
+int Galpao::nextQ(){ return this->q.front(); }
+
+void Galpao::removeNext(){ this->q.pop(); }
+
+queue<int> Galpao::getQueue(){ return this->q; }
+
+int Galpao::getSum(){ return this->sum; }
+
+void Galpao::adcSum(int w){
+	this->sum += w;
 }
 
-int Galpao::nextQ(){ return q.front(); }
-void Galpao::removeNext(){ q.pop(); }
-
-queue<int> Galpao::getQueue(){ return q; }
-
-int Galpao::getSum(){ return sum; }
+void Galpao::pushQueue(int w){
+	this->q.push(w);
+}
 
 int Galpao::decSum(int w){
 	this->sum -= w;
+}
+
+void Galpao::zeraSatanai(){
+	this->sum = 0;
+	while(!this->q.empty()) this->q.pop();
+}
+
+void Galpao::add(int w){
+	//cout << " ADDantes: " << this->sum << " " << this->q.size() << endl;
+	this->sum += w;
+	this->q.push(w);
+	cout << this->q.size() << " " << this->sum << endl;
 }
 
 //caminhao
@@ -93,7 +113,7 @@ Caminhao::Caminhao(){
 	while(!this->s.empty()) this->s.pop();
 }
 
-Caminhao::~Caminhao(){};
+Caminhao::~Caminhao(){ }
 
 void Caminhao::printStack(){
 	stack<int> temp = this->s;
@@ -104,17 +124,23 @@ void Caminhao::printStack(){
 	}
 	cout << endl;
 }
+void Caminhao::zeraMisera(){
+	this->sum = 0;
+	this->capacity = 0;
+	while(!this->s.empty()) this->s.pop();
 
+}
 void Caminhao::loa(Galpao &g){
-	int temp = g.nextQ();
-	while(!g.isEmpty() && this->sum + temp <= this->capacity){
-		this->s.push(temp);
+	//cout << " LOAantes: " << "total: " << this->sum << "itens: " << this->s.size() << "cap: " << this->capacity  << endl;
+	while(!g.isEmpty() && g.nextQ() + this->sum <= this->capacity){
+		int temp = g.nextQ();
 		g.removeNext();
 		g.decSum(temp);
+		this->s.push(temp);
 		this->sum += temp;
-		if(!g.isEmpty()) temp = g.nextQ();
 	}
-	//g.printQueue();
+
+	cout << " " << this->s.size() << endl;
 }
 
 void Caminhao::del(){
@@ -122,7 +148,7 @@ void Caminhao::del(){
 		this->sum -= this->s.top();
 		this->s.pop();
 	}
-	cout << s.size() << endl;
+	cout << this->s.size() << endl;
 }
 
 void Caminhao::inf(){
@@ -130,26 +156,28 @@ void Caminhao::inf(){
 }
 
 void Caminhao::setCapacity(int c){
-	capacity = c;
+	this->capacity = c;
 }
 
-int Caminhao::getCapacity(){ return capacity; }
+int Caminhao::getCapacity(){ return this->capacity; }
 
-int Caminhao::getSize(){ return s.size(); }
+int Caminhao::getSize(){ return this->s.size(); }
+int Caminhao::getSum(){ return this->sum; }
 // ------------------------ main .cpp ------------------------------
 
 int main(){
 
-	bool newCase = false, firstTime = true, end = false;
-	int n, cap, op;
+	bool newCase = false, firstTime = true, end = false, x = true;
+	int n, cap, op, m, v;
 	char str[4];
+	Galpao g;
 	while(!end){
-		if(firstTime){cin >> n;}
-		Galpao g;
+		if(firstTime) scanf("%d", &n);
 		Caminhao *c = new Caminhao[n];
 		for(int j = 0; j < n; j++){
-			cin >> cap;
+			scanf(" %d", &cap);
 			c[j].setCapacity(cap);
+			//cout << "capacidade "<< j << " " << cap << endl;
 		}
 		firstTime = false;
 		while(true){
@@ -157,34 +185,32 @@ int main(){
 				end = true;
 				break;
 			}
-			scanf("%d", &op);
-			//cout << str << " " << op << endl;
 			if(!strcmp(str, "ADD")){
+				scanf("%d", &op);
 				g.add(op);
+
 			}else if(!strcmp(str, "LOA")){
-				if(op>=n){
-				}else{
-					c[op].loa(g);
-					cout << op << " " << c[op].getSize() << endl;
-				}
+				scanf("%d", &op);
+				cout << op;
+				c[op].loa(g);
+				//cout << "depois: total: " << c[op].getSum() << " itens: " << c[op].getSize() << endl;
+				
 			}else if(!strcmp(str, "DEL")){
-				if(op>=n){
-				}else{
-					cout << op << " ";
-					c[op].del();				
-				}
+				scanf("%d", &op);
+				cout << op << " ";
+				c[op].del();
+				
 			}else if(!strcmp(str, "INF")){
-				if(op>=n){
-					cout <<"debug: "<< op << " " << n << endl;
-				}else{
-					cout << op << " ";
-					c[op].inf();
-				}
+				scanf("%d", &op);
+				cout << op << " ";
+				c[op].inf();
+
 			}else{
 				n = atoi(str);
 				cout << endl;
-				//delete[] c; 
-				//g.~Galpao();
+				delete [] c;
+				c = NULL;
+				g.zeraSatanai();
 				break;
 			}
 
