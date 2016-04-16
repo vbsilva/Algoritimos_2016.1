@@ -1,4 +1,4 @@
-# Algoritimos_2016.1
+# Algoritimos 2016.1 - C++
 > Repositorio dos códigos das listas de algorítimos 2016.1 - CIn UFPE.  
 > Infelizmente todos os arquivos precisam ficar em um único lugar para submeter no the huxley. class.cpp, header.h e source.cpp todos no mesmo arquivo Lx.cpp.  
 > Obs: No intuito de aprender C++.  
