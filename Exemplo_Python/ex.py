@@ -12,5 +12,6 @@ def main():
 	x.setNome("olar mundo!")
 	print(x.getNome())
 
+
 if __name__ == "__main__":
 	main()
