@@ -16,7 +16,8 @@
 
 ### Comparando o tempo de execução: 
 
-(C sem usar bibliotecas)
+(C sem usar bibliotecas*)  
+(Python sem otimizações*)  
 
 | Lista | C | C++ | Python |
 |:-----:|:-:|:---:|:------:|
