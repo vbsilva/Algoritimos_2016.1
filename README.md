@@ -7,7 +7,7 @@
 
 - [x] [Lista 1](https://www.thehuxley.com/problem/708):&nbsp;&nbsp;&nbsp;A Transportadora( lista, fila e pilhas)  
 - [x] [Lista 2](https://www.thehuxley.com/problem/716):&nbsp;&nbsp;&nbsp;BOING( ordenação e busca binária)  
-- [ ] [Lista 3]  
+- [ ] [Lista 3](https://www.thehuxley.com/problem/749):&nbsp;&nbsp;&nbsp;AVLMap( AVL e hashtable)  
 - [ ] [Lista 4]  
 - [ ] [Lista 5]  
 - [ ] [Lista 6]  
