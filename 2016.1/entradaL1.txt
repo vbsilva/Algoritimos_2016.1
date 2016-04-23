@@ -1,0 +1,3 @@
+$TEXTO
+casa
+$CONSULTAS
