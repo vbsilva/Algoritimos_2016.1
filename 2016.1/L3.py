@@ -1,11 +1,12 @@
 class wordNode(object):
-	def __init__(self, word):
+	def __init__(self, word, line):
 		self.__word = word
 		self.__size = len(word)
 		self.__hashcode = 0
 		self.__left = None
 		self.__right = None
 		self.__occurrence = []
+		self.__line = line
 
 	def getHashcode(self):
 		return self.__hashcode
@@ -45,7 +46,76 @@ class AVLTree(object):
 			else:
 				print("todo")
 
-		#self.rebalance()
+		self.rebalance()
+
+	def searchWord(self, wordNode):
+
+
+	def update_heights(self, recursive = True):
+		if self.__node:
+			if recursive:
+				if self.__node.__left:
+					self.__node.__left.update_heights()
+				if self.__node.__right:
+					self.__node.__right.update_heights()
+			self.__height = 1 + max(self.__node.__left.__height, self.__node.__right.__height)
+		else:
+			self.__height = -1
+
+	def update_balances(self, recursive = True):
+		if self.__node:
+			if recursive:
+				if self.__node.__left:
+					self.__node.__left.update_balances()
+				if self.__node.__right:
+					self.__node.__right.update_balances()
+			self.__balance = self.__node.__left.__height - self.__node.__right.__height
+		else:
+			self.__balance = 0
+
+	def rotate_right(self):
+		newRoot = self.__node.__left.__node
+		newLeftSub = newRoot.__right.__node
+		oldRoot = self.__node
+
+		self.__node = newRoot
+		oldRoot.__left.__node = newLeftSub
+		newRoot.__right.__node = oldRoot
+
+	def rotate_left(self):
+		newRoot = self.__node.__right.__node
+		newLeftSub = newRoot.__left.__node
+		oldRoot = self.__node
+
+		self.__node = newRoot
+		oldRoot.__right.__node = newLeftSub
+		newRoot.__left.__node = oldRoot
+
+	def rebalance(self):
+		self.update_heights(recursive = False)
+		self.update_balances(False)
+
+		while self.__balance < -1 or self.__balance > 1:
+			if self.__balance > 1:
+
+				if self.__node.__left.__balance < 0:
+					self.__node.__left.rotate_left()
+					self.update_heights()
+					self.update_balances()
+
+				self.rotate_right()
+				self.update_heights()
+				self.update_balances()
+
+			if self.__balance < -1:
+				if self.__node.__right.__balance > 0:
+					self.__node.__right.rotate_right()
+					self.update_heights()
+					self.update_balances()
+
+				self.rotate_left()
+				self.update_heights()
+				self.update_balances()
 
 	def inOrderTransverse(self):
 		result = []
@@ -78,7 +148,7 @@ def main():
 			else:
 				i += 1
 				for word in line.split():
-					w = wordNode(word)
+					w = wordNode(word, i)
 					w.setHashcode()
 					avl.insert(w)
 
