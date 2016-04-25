@@ -6,7 +6,7 @@ class wordNode(object):
 		self.__left = None
 		self.__right = None
 		self.__occurrence = []
-		self.__line = line
+		self.__occurrence.append(line)
 
 	def getHashcode(self):
 		return self.__hashcode
@@ -20,12 +20,23 @@ class wordNode(object):
 			ordChar = ord(letter) - char_a
 			self.__hashcode += (ordChar*(26**(self.__size - index)))
 
+	def getOcurrence(self):
+		return self.__occurrence
+
+	def extendOcurrence(self, lines):
+		self.__occurrence.extend(lines)
+
+
+
 
 class AVLTree(object):
 	def __init__(self):
 		self.__node = None
-		self.__height = -1
+		self.__height = 0
 		self.__balance = 0
+
+	def getHeight(self):
+		return self.__height
 
 	def insert(self, wordNode):
 
@@ -42,14 +53,31 @@ class AVLTree(object):
 
 		elif wordNode.getHashcode() == self.__node.getHashcode():
 			if wordNode.getWord() == self.__node.getWord():
-				print("todo")
-			else:
-				print("todo")
+				self.__node.extendOcurrence(wordNode.getOcurrence())
+			elif wordNode.getWord() < self.__node.getWord():
+				self.__node.__left.insert(wordNode)
+			elif wordNode.getWord() > self.__node.getWord():
+				self.__node.__right.insert(wordNode)
 
 		self.rebalance()
 
 	def searchWord(self, wordNode):
+		if self.__node == None:
+			print("not found")
 
+		elif self.__node.getHashcode() == wordNode.getHashcode():
+			if self.__node.getWord() == wordNode.getWord():
+				print("{} {} {}".format(self.__node.getWord(), self.getHeight(), self.__node.getOcurrence() ))
+			elif self.__node.getWord() < wordNode.getWord():
+				self.__node.__left.searchWord(wordNode)
+			elif self.__node.getWord() > wordNode.getWord():
+				self.__node.__right.searchWord(wordNode)
+
+		elif self.__node.getHashcode() < wordNode.getHashcode():
+			self.__node.__left.searchWord(wordNode)
+		
+		elif self.__node.getHashcode() > wordNode.getHashcode():
+			self.__node.__right.searchWord(wordNode)
 
 	def update_heights(self, recursive = True):
 		if self.__node:
@@ -60,7 +88,7 @@ class AVLTree(object):
 					self.__node.__right.update_heights()
 			self.__height = 1 + max(self.__node.__left.__height, self.__node.__right.__height)
 		else:
-			self.__height = -1
+			self.__height = 0
 
 	def update_balances(self, recursive = True):
 		if self.__node:
@@ -140,11 +168,13 @@ def main():
 		while True:
 			line = input()
 			if line == "$CONSULTAS":
-				print("todo")
-				r = avl.inOrderTransverse()
-				for x in r:
-					print("{}: {}".format(x.getHashcode(), x.getWord()))
-				break
+				try:
+					line = input()
+					w = wordNode(line, 0)
+					w.setHashcode()
+					avl.searchWord(w)
+				except EOFError:
+					break
 			else:
 				i += 1
 				for word in line.split():
