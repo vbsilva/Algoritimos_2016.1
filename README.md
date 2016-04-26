@@ -18,13 +18,13 @@
 
 (C sem usar bibliotecas*)  
 (Python sem otimizações*)  
-¹ : referente a entrada que deu TLE
+¹ : referente a entrada que deu TLE  
 
 | Lista | C | C++ | Python |
 |:-----:|:-:|:---:|:------:|
 |1    |0.1393|0.1413|0.8431|  
 |2    |0.0213|0.0730|0.8997|  
-|3    |0.1392|x|2.133¹|  
+|3    |0.1392|x|2.133 ¹|  
 |4    |x|x|x|  
 |5    |x|x|x|  
 |6    |x|x|x|  
